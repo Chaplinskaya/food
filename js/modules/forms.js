@@ -1,7 +1,9 @@
-function forms() {
-    //Forms
+import {closeModal, openModal} from './modal';
+import {postData} from '../services/services';
 
-    const forms = document.querySelectorAll('form');
+function forms(formSelector, modalTimerId) {
+    //Forms
+    const forms = document.querySelectorAll(formSelector);
     const message = {
         loading: 'img/form/spinner.svg',
         success: 'Спасибо! Мы скоро с Вами свяжемся...',
@@ -10,17 +12,6 @@ function forms() {
     forms.forEach(item => {
         bindPostData(item);
     });//на каждую форму вызовет postData
-
-    const postData = async (url, data) => {
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: data
-            });
-            return await res.json();
-        };
 
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -90,7 +81,7 @@ function forms() {
     function showThanksModal(message) {
         const prevModalDialog = document.querySelector('.modal__dialog');
         prevModalDialog.classList.add('hide');
-        openModal();
+        openModal('.modal', modalTimerId);
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
@@ -104,7 +95,7 @@ function forms() {
                 thanksModal.remove();
                 prevModalDialog.classList.add('show');
                 prevModalDialog.classList.remove('hide');
-                closeModal();
+                closeModal('.modal');
             }, 4000);
     };
     // fetch('https://jsonplaceholder.typicode.com/todos/1')
@@ -129,4 +120,5 @@ function forms() {
         .then(res => console.log(res));
 
     }
-    module.exports = forms;
+    //module.exports = forms;
+    export default forms;//ES6
